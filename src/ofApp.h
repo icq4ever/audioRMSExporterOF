@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxJSON.h"
 
 class ofApp : public ofBaseApp{
 public:
@@ -20,6 +21,8 @@ public:
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
 
+	void exportToJSON();
+
 	ofSoundPlayer player;
 	static constexpr size_t nBandsToGet=128;
 	std::array<float, nBandsToGet> fftSmoothed{{0}};
@@ -29,4 +32,6 @@ public:
 	double db;
 
 	//audioPlayer
+	vector<float> frames;
+	uint64_t timer;
 };
