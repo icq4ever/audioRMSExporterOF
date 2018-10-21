@@ -25,10 +25,12 @@ void ofApp::update(){
 	float *val = ofSoundGetSpectrum(nBandsToGet);
 	level = 0;
 	for(int i=0; i<nBandsToGet; i++){
-		fftSmoothed[i] *= 0.96f;
+		fftSmoothed[i] *= meterEase;
 		if(fftSmoothed[i] < val[i])	fftSmoothed[i] = val[i];
+
 		
 		level += fftSmoothed[i] * fftSmoothed[i];
+		// level += val[i] * val[i];
 	}
 	level = sqrt(level / nBandsToGet);
 	level = ofMap(level, 0, 1, 0, 1, true);
@@ -45,7 +47,9 @@ void ofApp::update(){
 		if(player.isPlaying()){
 			// save currentPlayer's RMS value to vector
 			frames.push_back(level);
-			cout << level << endl;
+			cout << int(ofMap(level, 0, 1, 0, 2047, true)) << endl;
+			
+
 			timer = ofGetElapsedTimeMillis();
 		} else {
 			cout << "done!" <<endl;
@@ -81,11 +85,15 @@ void ofApp::draw(){
 void ofApp::exportToJSON(){
 	ofxJSONElement json;
 
+	int maxVolume = 0;
 	Json::Value vec(Json::arrayValue);
 	for(uint i=0; i<frames.size(); i++){
-		vec.append(frames[i]);
+		int volumeInt = int(ofMap(frames[i], 0, 1, 0, 2047, true));
+		if(maxVolume < volumeInt)	maxVolume = volumeInt;
+		vec.append(volumeInt);
 	}
 	json["frames"] = vec;
+	json["maxValue"] = maxVolume;
 
 	if(!bExportDone){
 		if(json.save("export/frames.json", true)){

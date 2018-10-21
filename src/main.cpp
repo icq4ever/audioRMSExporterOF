@@ -6,7 +6,7 @@ int main( ){
 	// using programmable pipeline
 	ofGLFWWindowSettings settings;
 	settings.setGLVersion(3,2);
-	settings.setSize(1280, 800);
+	settings.setSize(1280, 400);
 	settings.windowMode = OF_WINDOW;
 	ofCreateWindow(settings);
 

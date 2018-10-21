@@ -27,6 +27,7 @@ public:
 	static constexpr size_t nBandsToGet=128;
 	std::array<float, nBandsToGet> fftSmoothed{{0}};
 
+	float meterEase = 0.5;
 	double level, audioLevel, audioLevel2;
 	double db;
 
