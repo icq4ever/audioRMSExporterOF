@@ -36,8 +36,7 @@ void ofApp::update(){
 
 	// level = 20 * log10(level);
 	db = 20 * log(level);
-
-	// bgColor = (int)ofMap(level, 0, 1, 0, 255, true);
+	
 	audioLevel = ofMap(level, 0, 1, 0, ofGetWidth() - 100, true);
 	audioLevel2 = ofMap(db, -96, 0, 0, ofGetWidth() - 100, true);
 
@@ -52,10 +51,7 @@ void ofApp::update(){
 			cout << "done!" <<endl;
 			exportToJSON();
 		}
-	}
-
-
-	
+	}	
 }
 
 //--------------------------------------------------------------
@@ -91,11 +87,15 @@ void ofApp::exportToJSON(){
 	}
 	json["frames"] = vec;
 
-	if(json.save("export/frames.json", true)){
-		ofLogNotice("ofApp::exportToJSON") << "export failed...";
-	} else {
-		ofLogNotice("ofApp::exportToJSON") << "export finished!";
+	if(!bExportDone){
+		if(json.save("export/frames.json", true)){
+			ofLogNotice("ofApp::exportToJSON") << "export finished";
+			bExportDone = true;
+		}  else {
+		ofLogNotice("ofApp::exportToJSON") << "export failed!";
 		cout << "json.getRawString() " << endl;
+	} else {
+		ofExit();
 	}
 }
 

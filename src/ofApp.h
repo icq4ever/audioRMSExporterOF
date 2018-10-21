@@ -27,11 +27,13 @@ public:
 	static constexpr size_t nBandsToGet=128;
 	std::array<float, nBandsToGet> fftSmoothed{{0}};
 
-	ofColor bgColor;
 	double level, audioLevel, audioLevel2;
 	double db;
 
 	//audioPlayer
 	vector<float> frames;
 	uint64_t timer;
+
+	// check is Saved
+	bool bExportDone = false;
 };
