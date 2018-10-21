@@ -92,8 +92,9 @@ void ofApp::exportToJSON(){
 			ofLogNotice("ofApp::exportToJSON") << "export finished";
 			bExportDone = true;
 		}  else {
-		ofLogNotice("ofApp::exportToJSON") << "export failed!";
-		cout << "json.getRawString() " << endl;
+			ofLogNotice("ofApp::exportToJSON") << "export failed!";
+			cout << "json.getRawString() " << endl;
+		}
 	} else {
 		ofExit();
 	}
