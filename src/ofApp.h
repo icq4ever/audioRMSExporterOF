@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxDatGui.h"
 #include "ofxJSON.h"
 
 class ofApp : public ofBaseApp{
@@ -37,4 +38,13 @@ public:
 
 	// check is Saved
 	bool bExportDone = false;
+	bool bRecording = false;
+
+	// some GUI
+	// ofxPanel gui;
+	void setupGUI();
+	ofxDatGuiButton* loadBtn;
+	ofxDatGuiButton* beginBtn;
+
+	void onButtonEvent(ofxDatGuiButtonEvent e);
 };

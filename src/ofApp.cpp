@@ -11,51 +11,89 @@ void ofApp::setup(){
 	// player.load("hour.mp3");
 	player.load("2.mp3");
 	// player.setLoop(true);
-	player.play();
+	// player.play();
 
 	ofxJSONElement json;
 }
 
+void ofApp::setupGUI(){
+	loadBtn = new ofxDatGuiButton("LOAD");
+	beginBtn = new ofxDatGuiButton("BEGIN");
+
+	loadBtn->setPosition(50, ofGetHeight() - 50);
+	beginBtn->setPosition(loadBtn->getX() + 50, loadBtn->getY());
+
+	loadBtn->onButtonEvent(this, &ofApp::onButtonEvent);
+	beginBtn->onButtonEvent(this, &ofApp::onButtonEvent);
+	
+	
+}
+
+void ofApp::onButtonEvent(ofxDatGuiButtonEvent e){
+	if(e.target->getLabel() == "LOAD"){
+		// ofFileDialogResult openFileResult= ofSystemLoadDialog("Select mp3 file"); 
+
+		// if(openFileResult.bSuccess){
+		// 	player.stop();
+		// 	player.unload();
+		// 	ofLogVerbose("file selected");
+		// 	player.load(openFileResult.getPath());
+		// 	bRecording = false;
+		// } else {
+		// 	ofLogVerbose("canceled.");
+		// }
+	} else if (e.target->getLabel() == "BEGIN"){
+		// bRecording = true;
+		// timer = ofGetElapsedTimeMillis();
+		// bExportDone = false;
+		// player.play();
+	}
+}
+
 //--------------------------------------------------------------
 void ofApp::update(){
+	loadBtn->update();
+	beginBtn->update();
 
-	//update sound playing system
-	ofSoundUpdate();
-	
-	float *val = ofSoundGetSpectrum(nBandsToGet);
-	level = 0;
-	for(int i=0; i<nBandsToGet; i++){
-		fftSmoothed[i] *= meterEase;
-		if(fftSmoothed[i] < val[i])	fftSmoothed[i] = val[i];
-
+	// if(bRecording){
+	// 	//update sound playing system
+	// 	ofSoundUpdate();
 		
-		level += fftSmoothed[i] * fftSmoothed[i];
-		// level += val[i] * val[i];
-	}
-	level = sqrt(level / nBandsToGet);
-	level = ofMap(level, 0, 1, 0, 1, true);
-	// cout << level << endl;
+	// 	float *val = ofSoundGetSpectrum(nBandsToGet);
+	// 	level = 0;
+	// 	for(int i=0; i<nBandsToGet; i++){
+	// 		fftSmoothed[i] *= meterEase;
+	// 		if(fftSmoothed[i] < val[i])	fftSmoothed[i] = val[i];
 
-	// level = 20 * log10(level);
-	db = 20 * log(level);
-	
-	audioLevel = ofMap(level, 0, 1, 0, ofGetWidth() - 100, true);
-	audioLevel2 = ofMap(db, -96, 0, 0, ofGetWidth() - 100, true);
-
-	// save every 50 ms
-	if(ofGetElapsedTimeMillis() - timer > 50 && player.isLoaded()){
-		if(player.isPlaying()){
-			// save currentPlayer's RMS value to vector
-			frames.push_back(level);
-			cout << int(ofMap(level, 0, 1, 0, 2047, true)) << endl;
 			
+	// 		level += fftSmoothed[i] * fftSmoothed[i];
+	// 		// level += val[i] * val[i];
+	// 	}
+	// 	level = sqrt(level / nBandsToGet);
+	// 	level = ofMap(level, 0, 1, 0, 1, true);
+	// 	// cout << level << endl;
 
-			timer = ofGetElapsedTimeMillis();
-		} else {
-			cout << "done!" <<endl;
-			exportToJSON();
-		}
-	}	
+	// 	// level = 20 * log10(level);
+	// 	db = 20 * log(level);
+		
+	// 	audioLevel = ofMap(level, 0, 1, 0, ofGetWidth() - 100, true);
+	// 	audioLevel2 = ofMap(db, -96, 0, 0, ofGetWidth() - 100, true);
+
+	// 	// save every 50 ms
+	// 	if(ofGetElapsedTimeMillis() - timer > 50 && player.isLoaded()){
+	// 		if(player.isPlaying()){
+	// 			// save currentPlayer's RMS value to vector
+	// 			frames.push_back(level);
+	// 			cout << int(ofMap(level, 0, 1, 0, 2047, true)) << endl;
+				
+
+	// 			timer = ofGetElapsedTimeMillis();
+	// 		} else {
+	// 			// cout << "done!" <<endl;
+	// 			// exportToJSON();
+	// 		}
+	// 	}	
+	// }
 }
 
 //--------------------------------------------------------------
@@ -80,6 +118,9 @@ void ofApp::draw(){
 	ofDrawRectangle(50, 250, ofGetWidth()-100, 20);
 
 	ofDrawBitmapStringHighlight(ofToString(int(db)) + " dB", 50, 300, ofColor(ofColor::fromHex(0xFFFF00)), ofColor(ofColor::fromHex(0x000000)));
+
+	loadBtn->draw();
+	beginBtn->draw();
 }
 
 void ofApp::exportToJSON(){
@@ -107,7 +148,6 @@ void ofApp::exportToJSON(){
 		ofExit();
 	}
 }
-
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){ }
 //--------------------------------------------------------------
