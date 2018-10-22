@@ -25,6 +25,7 @@ public:
 	void exportToJSON();
 
 	ofSoundPlayer player;
+	string fileName;
 	static constexpr size_t nBandsToGet=128;
 	std::array<float, nBandsToGet> fftSmoothed{{0}};
 

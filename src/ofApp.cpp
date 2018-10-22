@@ -7,6 +7,7 @@ void ofApp::setup(){
 	ofBackground(0);
 
 	ofSetWindowTitle("RMS exporter to JSON");
+	setupGUI();
 	
 	// player.load("hour.mp3");
 	player.load("2.mp3");
@@ -20,8 +21,10 @@ void ofApp::setupGUI(){
 	loadBtn = new ofxDatGuiButton("LOAD");
 	beginBtn = new ofxDatGuiButton("BEGIN");
 
+	loadBtn->setWidth(80);
+	beginBtn->setWidth(80);
 	loadBtn->setPosition(50, ofGetHeight() - 50);
-	beginBtn->setPosition(loadBtn->getX() + 50, loadBtn->getY());
+	beginBtn->setPosition(loadBtn->getX() + 100, loadBtn->getY());
 
 	loadBtn->onButtonEvent(this, &ofApp::onButtonEvent);
 	beginBtn->onButtonEvent(this, &ofApp::onButtonEvent);
@@ -31,22 +34,24 @@ void ofApp::setupGUI(){
 
 void ofApp::onButtonEvent(ofxDatGuiButtonEvent e){
 	if(e.target->getLabel() == "LOAD"){
-		// ofFileDialogResult openFileResult= ofSystemLoadDialog("Select mp3 file"); 
+		ofFileDialogResult openFileResult= ofSystemLoadDialog("Select mp3 file"); 
 
-		// if(openFileResult.bSuccess){
-		// 	player.stop();
-		// 	player.unload();
-		// 	ofLogVerbose("file selected");
-		// 	player.load(openFileResult.getPath());
-		// 	bRecording = false;
-		// } else {
-		// 	ofLogVerbose("canceled.");
-		// }
+		if(openFileResult.bSuccess){
+			player.stop();
+			player.unload();
+			ofLogVerbose("file selected");
+			player.load(openFileResult.getPath());
+			fileName = openFileResult.getName();
+			// player.play();
+			bRecording = false;
+		} else {
+			ofLogVerbose("canceled.");
+		}
 	} else if (e.target->getLabel() == "BEGIN"){
-		// bRecording = true;
-		// timer = ofGetElapsedTimeMillis();
-		// bExportDone = false;
-		// player.play();
+		bRecording = true;
+		timer = ofGetElapsedTimeMillis();
+		bExportDone = false;
+		player.play();
 	}
 }
 
@@ -55,45 +60,45 @@ void ofApp::update(){
 	loadBtn->update();
 	beginBtn->update();
 
-	// if(bRecording){
-	// 	//update sound playing system
-	// 	ofSoundUpdate();
+	if(bRecording){
+		//update sound playing system
+		ofSoundUpdate();
 		
-	// 	float *val = ofSoundGetSpectrum(nBandsToGet);
-	// 	level = 0;
-	// 	for(int i=0; i<nBandsToGet; i++){
-	// 		fftSmoothed[i] *= meterEase;
-	// 		if(fftSmoothed[i] < val[i])	fftSmoothed[i] = val[i];
+		float *val = ofSoundGetSpectrum(nBandsToGet);
+		level = 0;
+		for(int i=0; i<nBandsToGet; i++){
+			fftSmoothed[i] *= meterEase;
+			if(fftSmoothed[i] < val[i])	fftSmoothed[i] = val[i];
 
 			
-	// 		level += fftSmoothed[i] * fftSmoothed[i];
-	// 		// level += val[i] * val[i];
-	// 	}
-	// 	level = sqrt(level / nBandsToGet);
-	// 	level = ofMap(level, 0, 1, 0, 1, true);
-	// 	// cout << level << endl;
+			level += fftSmoothed[i] * fftSmoothed[i];
+			// level += val[i] * val[i];
+		}
+		level = sqrt(level / nBandsToGet);
+		level = ofMap(level, 0, 1, 0, 1, true);
+		// cout << level << endl;
 
-	// 	// level = 20 * log10(level);
-	// 	db = 20 * log(level);
+		// level = 20 * log10(level);
+		db = 20 * log(level);
 		
-	// 	audioLevel = ofMap(level, 0, 1, 0, ofGetWidth() - 100, true);
-	// 	audioLevel2 = ofMap(db, -96, 0, 0, ofGetWidth() - 100, true);
+		audioLevel = ofMap(level, 0, 1, 0, ofGetWidth() - 100, true);
+		audioLevel2 = ofMap(db, -96, 0, 0, ofGetWidth() - 100, true);
 
-	// 	// save every 50 ms
-	// 	if(ofGetElapsedTimeMillis() - timer > 50 && player.isLoaded()){
-	// 		if(player.isPlaying()){
-	// 			// save currentPlayer's RMS value to vector
-	// 			frames.push_back(level);
-	// 			cout << int(ofMap(level, 0, 1, 0, 2047, true)) << endl;
+		// save every 50 ms
+		if(ofGetElapsedTimeMillis() - timer > 50 && player.isLoaded()){
+			if(player.isPlaying()){
+				// save currentPlayer's RMS value to vector
+				frames.push_back(level);
+				cout << int(ofMap(level, 0, 1, 0, 2047, true)) << endl;
 				
 
-	// 			timer = ofGetElapsedTimeMillis();
-	// 		} else {
-	// 			// cout << "done!" <<endl;
-	// 			// exportToJSON();
-	// 		}
-	// 	}	
-	// }
+				timer = ofGetElapsedTimeMillis();
+			} else {
+				// cout << "done!" <<endl;
+				exportToJSON();
+			}
+		}	
+	}
 }
 
 //--------------------------------------------------------------
@@ -112,12 +117,12 @@ void ofApp::draw(){
 
 	ofSetColor(255, 255, 0);
 	ofFill();
-	ofDrawRectangle(50, 250, audioLevel2, 20);
+	ofDrawRectangle(50, 150, audioLevel2, 20);
 	ofSetColor(255);
 	ofNoFill();
-	ofDrawRectangle(50, 250, ofGetWidth()-100, 20);
+	ofDrawRectangle(50, 150, ofGetWidth()-100, 20);
 
-	ofDrawBitmapStringHighlight(ofToString(int(db)) + " dB", 50, 300, ofColor(ofColor::fromHex(0xFFFF00)), ofColor(ofColor::fromHex(0x000000)));
+	ofDrawBitmapStringHighlight(ofToString(int(db)) + " dB", 50, 200, ofColor(ofColor::fromHex(0xFFFF00)), ofColor(ofColor::fromHex(0x000000)));
 
 	loadBtn->draw();
 	beginBtn->draw();
@@ -137,7 +142,7 @@ void ofApp::exportToJSON(){
 	json["maxValue"] = maxVolume;
 
 	if(!bExportDone){
-		if(json.save("export/frames.json", true)){
+		if(json.save("export/" + fileName + ".json", true)){
 			ofLogNotice("ofApp::exportToJSON") << "export finished";
 			bExportDone = true;
 		}  else {

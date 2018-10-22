@@ -105,7 +105,9 @@
                 "${workspaceFolder}",
                 "${workspaceRoot}/../../../addons/ofxDatGui/src",
                 "/home/icq4ever/oF/addons/ofxJSON/src",
-                "/home/icq4ever/oF/addons/ofxDatGui/src/components"
+                "/home/icq4ever/oF/addons/ofxDatGui/src/components",
+                "/home/icq4ever/oF/addons/ofxDatGui/src/core",
+                "/home/icq4ever/oF/addons/ofxDatGui/src/themes"
             ],
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
