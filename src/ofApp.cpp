@@ -6,6 +6,10 @@ void ofApp::setup(){
 	ofSetFrameRate(30);
 	ofBackground(0);
 
+	// font setting
+	font.load("fonts/iosevka-term-ss02-light.ttf", 24);
+	font.setLetterSpacing(0.9);
+
 	ofSetWindowTitle("RMS exporter to JSON");
 	setupGUI();
 	
@@ -126,6 +130,9 @@ void ofApp::draw(){
 
 	loadBtn->draw();
 	beginBtn->draw();
+
+	ofSetColor(ofColor::fromHex(0x666666));
+	font.drawString(fileName, ofGetWidth() - 280, ofGetHeight() - 50);
 }
 
 void ofApp::exportToJSON(){

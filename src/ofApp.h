@@ -24,6 +24,7 @@ public:
 
 	void exportToJSON();
 
+	ofTrueTypeFont font;
 	ofSoundPlayer player;
 	string fileName;
 	static constexpr size_t nBandsToGet=128;
