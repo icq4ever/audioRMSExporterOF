@@ -1,5 +1,5 @@
 # audioRMSExporterOF
-export RMS value to float sequence in JSON for controlling DMX light 
+export RMS value to float sequence as JSON 
 
 ## pre-requirements
 - [openFrameoworks](http://openframeworks.cc)
