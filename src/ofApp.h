@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxDatGui.h"
 #include "ofxJSON.h"
 
 class ofApp : public ofBaseApp{
@@ -24,6 +25,7 @@ public:
 	void exportToJSON();
 
 	ofSoundPlayer player;
+	string fileName;
 	static constexpr size_t nBandsToGet=128;
 	std::array<float, nBandsToGet> fftSmoothed{{0}};
 
@@ -37,4 +39,13 @@ public:
 
 	// check is Saved
 	bool bExportDone = false;
+	bool bRecording = false;
+
+	// some GUI
+	// ofxPanel gui;
+	void setupGUI();
+	ofxDatGuiButton* loadBtn;
+	ofxDatGuiButton* beginBtn;
+
+	void onButtonEvent(ofxDatGuiButtonEvent e);
 };

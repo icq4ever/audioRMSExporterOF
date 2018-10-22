@@ -102,7 +102,12 @@
                 "/usr/include/gstreamer-1.0",
                 "/usr/include/glib-2.0",
                 "${workspaceRoot}",
-                "${workspaceFolder}"
+                "${workspaceFolder}",
+                "${workspaceRoot}/../../../addons/ofxDatGui/src",
+                "/home/icq4ever/oF/addons/ofxJSON/src",
+                "/home/icq4ever/oF/addons/ofxDatGui/src/components",
+                "/home/icq4ever/oF/addons/ofxDatGui/src/core",
+                "/home/icq4ever/oF/addons/ofxDatGui/src/themes"
             ],
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
