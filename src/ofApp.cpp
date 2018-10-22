@@ -74,12 +74,12 @@ void ofApp::draw(){
 
 	ofSetColor(255, 255, 0);
 	ofFill();
-	ofDrawRectangle(50, 250, audioLevel2, 20);
+	ofDrawRectangle(50, 150, audioLevel2, 20);
 	ofSetColor(255);
 	ofNoFill();
-	ofDrawRectangle(50, 250, ofGetWidth()-100, 20);
+	ofDrawRectangle(50, 150, ofGetWidth()-100, 20);
 
-	ofDrawBitmapStringHighlight(ofToString(int(db)) + " dB", 50, 300, ofColor(ofColor::fromHex(0xFFFF00)), ofColor(ofColor::fromHex(0x000000)));
+	ofDrawBitmapStringHighlight(ofToString(int(db)) + " dB", 50, 200, ofColor(ofColor::fromHex(0xFFFF00)), ofColor(ofColor::fromHex(0x000000)));
 }
 
 void ofApp::exportToJSON(){
